@@ -1,18 +1,23 @@
 #!/usr/bin/python
 
 import sys
+import winningNums
+import compare
 
-data = sys.stdin.readlines()
+filename = "./picks"
+file = open(filename)
+data = file.readlines()
 
-winning = data.pop().split()
-pb = winning.pop()
-winning = (set(winning), pb)
+winning = winningNums.getWinning()
+date = winning[0]
+winning = (set(winning[1]), winning[2])
 
+picks = []
 for line in data:
-	line = line.split()
-	pb = line.pop()
-	matching = set(line).intersection(winning[0])
-	if (pb == winning[1]) or (len(matching) > 1) :
-		print str(line) + " " + pb + " matched with: " + str(matching) + " " + pb
-	else:
-		print str(line) + " " + pb + " didn't match."
+  line = line.split()
+  pb = line.pop()
+  picks.append((set(line), pb))
+
+matches = compare.getMatching(picks, winning)
+
+print matches
