@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2.5
 
 import sys
 import winningNums
@@ -9,15 +9,22 @@ file = open(filename)
 data = file.readlines()
 
 winning = winningNums.getWinning()
-date = winning[0]
-winning = (set(winning[1]), winning[2])
+date = winning[0][0]
+winning = (winning[1], winning[2])
 
 picks = []
 for line in data:
   line = line.split()
   pb = line.pop()
-  picks.append((set(line), pb))
+  picks.append((line, pb))
 
 matches = compare.getMatching(picks, winning)
 
+print "Content-type: text/html"
+print ""
+print "<html><head><style>span{border: solid;} .win{background-color:red;}",
+print " .pb{background-color:yellow;} .pbwin{background-color:blue;}</style>",
+print "<title>CETL Lotto Checker</title></head><body>",
+print "<h2>Last Drawing on " + date + "</h2>",
 print matches
+print "</body></html>"
