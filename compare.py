@@ -16,6 +16,6 @@ def getMatching(picks, winning):
       entry += '"pbwin"'
     else:
       entry += '"pb"'
-    entry += '>' + winning[1] + '</span></div>'
+    entry += '>' + pick[1] + '</span></div>'
     result += entry
   return result
