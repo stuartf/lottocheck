@@ -22,7 +22,7 @@ matches = compare.getMatching(picks, winning)
 
 print "Content-type: text/html"
 print ""
-print "<html><head><style>span{border: solid; padding: 2px; margin: 2px;} div{margin:2px} .numwin{background-color:red;}",
+print "<html><head><style>span{border: thin solid; padding: 2px; margin: 2px;} div{margin:15px} .numwin{background-color:red;}",
 print " .pb{background-color:yellow;} .pbwin{background-color:blue;}</style>",
 print "<title>CETL Lotto Checker</title></head><body>",
 print "<h2>Last Drawing on " + date + "</h2>",
