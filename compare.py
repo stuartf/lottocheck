@@ -10,12 +10,12 @@ def getMatching(picks, winning):
         entry += '"numwin"'
       else:
         entry += '"num"'
-      entry += ">" + num + "</span>"
+      entry += ">%02d</span>" % num
     entry += '<span class='
     if (pick[1] == winning[1]):
       entry += '"pbwin"'
     else:
       entry += '"pb"'
-    entry += '>' + pick[1] + '</span></div>'
+    entry += '>%02d</span></div>' % pick[1]
     result += entry
   return result

@@ -10,21 +10,28 @@ data = file.readlines()
 
 winning = winningNums.getWinning()
 date = winning[0][0]
-winning = (winning[1], winning[2])
+winning = (map(int, winning[1]), int(winning[2]))
 
 picks = []
 for line in data:
   line = line.split()
   pb = line.pop()
-  picks.append((line, pb))
+  picks.append((map(int, line), int(pb)))
 
 matches = compare.getMatching(picks, winning)
 
-print "Content-type: text/html"
-print ""
-print "<html><head><style>span{border: thin solid; padding: 2px; margin: 2px;} div{margin:15px} .numwin{background-color:red;}",
-print " .pb{background-color:yellow;} .pbwin{background-color:blue;}</style>",
-print "<title>CETL Lotto Checker</title></head><body>",
+header = """Content-type: text/html
+
+<html><head><style>span{border: thin solid; padding: 2px; margin: 2px;}
+div{margin:15px} .numwin{background-color:red;} .pb{background-color:yellow;}
+.pbwin{background-color:blue;}</style>
+<title>CETL Lotto Checker</title></head><body>"""
+
+print header
 print "<h2>Last Drawing on " + date + "</h2>",
+print "<h3>Winning Numbers: ",
+for number in winning[0]:
+  print '<span class="num">%02d</span>' % number,
+print '<span class="pb">%02d</span></h3>' % winning[1]
 print matches
 print "</body></html>"
