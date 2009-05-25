@@ -8,9 +8,11 @@ filename = "./picks"
 file = open(filename)
 data = file.readlines()
 
-winning = winningNums.getWinning()
-date = winning[0][0]
-winning = (map(int, winning[1]), int(winning[2]))
+winning = winningNums.getWinning(2)
+date1 = winning[0][0][0]
+winning1 = (map(int, winning[0][1]), int(winning[0][2]))
+date2 = winning[1][0][0]
+winning2 = (map(int, winning[1][1]), int(winning[1][2]))
 
 picks = []
 for line in data:
@@ -18,7 +20,8 @@ for line in data:
   pb = line.pop()
   picks.append((map(int, line), int(pb)))
 
-matches = compare.getMatching(picks, winning)
+matches1 = compare.getMatching(picks, winning1)
+matches2 = compare.getMatching(picks, winning2)
 
 header = """Content-type: text/html
 
@@ -28,10 +31,16 @@ div{margin:15px} .numwin{background-color:red;} .pb{background-color:yellow;}
 <title>CETL Lotto Checker</title></head><body>"""
 
 print header
-print "<h2>Last Drawing on " + date + "</h2>",
+print "<h2>Last Drawing on " + date1 + "</h2>",
 print "<h3>Winning Numbers: ",
-for number in winning[0]:
+for number in winning1[0]:
   print '<span class="num">%02d</span>' % number,
-print '<span class="pb">%02d</span></h3>' % winning[1]
-print matches
+print '<span class="pb">%02d</span></h3>' % winning1[1]
+print matches1
+print "<h2>Previous Drawing on " + date2 + "</h2>",
+print "<h3>Winning Numbers: ",
+for number in winning2[0]:
+  print '<span class="num">%02d</span>' % number,
+print '<span class="pb">%02d</span></h3>' % winning2[1]
+print matches2
 print "</body></html>"
