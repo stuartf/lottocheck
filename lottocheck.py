@@ -25,7 +25,11 @@ matches2 = compare.getMatching(picks, winning2)
 
 header = """Content-type: text/html
 
-<html><head><style>span{border: thin solid; padding: 2px; margin: 2px;}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+
+<head><style type="text/css">span{border: thin solid; padding: 2px; margin: 2px;}
 div{margin:15px} .numwin{background-color:red;} .pb{background-color:yellow;}
 .pbwin{background-color:blue;}</style>
 <title>CETL Lotto Checker</title></head><body>"""
