@@ -67,7 +67,6 @@ template = Template("""Content-type: text/html; charset=UTF-8
 {% endfor %}
 <h2>Previous Drawing on {{ date2 }}</h2>
 <h3>Winning Numbers: 
-<div>
 {% for number in winning2[0] %}
   <span class="num">{{ "%02d" |format(number) }}</span>
 {% endfor %}
