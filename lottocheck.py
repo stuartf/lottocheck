@@ -2,7 +2,9 @@
 
 import sys
 import winningNums
-import compare
+from compare import compare
+
+from jinja2 import Template
 
 filename = "./picks"
 file = open(filename)
@@ -20,32 +22,71 @@ for line in data:
   pb = line.pop()
   picks.append((map(int, line), int(pb)))
 
-matches1 = compare.getMatching(picks, winning1)
-matches2 = compare.getMatching(picks, winning2)
+matches1 = compare(picks, winning1)
+matches2 = compare(picks, winning2)
 
-header = """Content-type: text/html; charset=UTF-8
+#TODO simplify the repetative parts of this and put it in a separate template file
+template = Template("""Content-type: text/html; charset=UTF-8
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
-
-<head><meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
-<style type="text/css">span{border: thin solid; padding: 2px; margin: 2px;}
-div{margin:15px} .numwin{background-color:red;} .pb{background-color:yellow;}
-.pbwin{background-color:blue;}</style>
-<title>CETL Lotto Checker</title></head><body>"""
-
-print header
-print "<h2>Last Drawing on " + date1 + "</h2>",
-print "<h3>Winning Numbers: ",
-for number in winning1[0]:
-  print '<span class="num">%02d</span>' % number,
-print '<span class="pb">%02d</span></h3>' % winning1[1]
-print matches1
-print "<h2>Previous Drawing on " + date2 + "</h2>",
-print "<h3>Winning Numbers: ",
-for number in winning2[0]:
-  print '<span class="num">%02d</span>' % number,
-print '<span class="pb">%02d</span></h3>' % winning2[1]
-print matches2
-print "</body></html>"
+<head>
+  <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+  <style type="text/css">
+    span{border: thin solid; padding: 2px; margin: 2px;}
+    div{margin:15px}
+    .numwin{background-color:red;}
+    .pb{background-color:yellow;}
+    .pbwin{background-color:blue;}
+  </style>
+  <title>CETL Lotto Checker</title>
+</head>
+<body>
+  <h2>Last Drawing on {{ date1 }}</h2>
+<h3>Winning Numbers: 
+{% for number in winning1[0] %}
+  <span class="num">{{ "%02d" |format(number) }}</span>
+{% endfor %}
+<span class="pb">{{ "%02d" |format(winning1[1]) }}</span></h3>
+{% for match in matches1.matches %}
+  <div>
+  {% for num in match.numbers %}
+    {% if num[1] %}
+      <span class="numwin">{{ "%02d" |format(num[0]) }}</span>
+    {% else %}
+      <span class="num">{{ "%02d" |format(num[0]) }}</span>
+    {% endif %}
+  {% endfor %}
+  {% if match.pb[1] %}
+    <span class="pbwin">{{ "%02d" |format(match.pb[0]) }}</span>
+  {% else %}
+    <span class="pb">{{ "%02d" |format(match.pb[0]) }}</span>
+  {% endif %}
+  </div>
+{% endfor %}
+<h2>Previous Drawing on {{ date2 }}</h2>
+<h3>Winning Numbers: 
+<div>
+{% for number in winning2[0] %}
+  <span class="num">{{ "%02d" |format(number) }}</span>
+{% endfor %}
+<span class="pb">{{ "%02d" |format(winning2[1]) }}</span></h3>
+{% for match in matches2.matches %}
+  <div>
+  {% for num in match.numbers %}
+    {% if num[1] %}
+      <span class="numwin">{{ "%02d" |format(num[0]) }}</span>
+    {% else %}
+      <span class="num">{{ "%02d" |format(num[0]) }}</span>
+    {% endif %}
+  {% endfor %}
+  {% if match.pb[1] %}
+    <span class="pbwin">{{ "%02d" |format(match.pb[0]) }}</span>
+  {% else %}
+    <span class="pb">{{ "%02d" |format(match.pb[0]) }}</span>
+  {% endif %}
+  </div>
+{% endfor %}
+</body></html>""")
+print template.render(date1=date1, winning1=winning1, date2=date2, winning2=winning2, matches1=matches1, matches2=matches2)
