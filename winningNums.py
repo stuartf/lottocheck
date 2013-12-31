@@ -2,7 +2,6 @@
 
 from urllib import urlopen
 from HTMLParser import HTMLParser
-import re
 
 class MMParser(HTMLParser):
     results = []
