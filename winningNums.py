@@ -24,16 +24,6 @@ class MMParser(HTMLParser):
     def getNums(self, days=1):
         return self.results[0:days]
 
-class MyHTMLParser(HTMLParser):
-    def handle_starttag(self, tag, attrs):
-        print "Start tag:", tag
-        for attr in attrs:
-            print "     attr:", attr
-    def handle_endtag(self, tag):
-        print "End tag  :", tag
-    def handle_data(self, data):
-        print "Data     :", data
-
 def getWinning(days=1):
     url = urlopen('http://megamillions.com/winning-numbers/last-25-drawings')
     parser = MMParser()
