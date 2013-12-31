@@ -1,26 +1,48 @@
 #!/usr/bin/python
 
 from urllib import urlopen
+from HTMLParser import HTMLParser
 import re
 
+class MMParser(HTMLParser):
+    results = []
+    target = None
+    pending = []
+    def handle_starttag(self, tag, attrs):
+        if (tag == 'td'):
+            for attr in attrs:
+                if (attr[0] == 'class' and attr[1] == 'dates'):
+                    self.target = 1
+                elif (attr[0] == 'class' and attr[1] == 'details'):
+                    self.results.append((self.pending[0], self.pending[1:6], self.pending[6]))
+                    self.target = None
+                    self.pending = []
+    def handle_data(self, data):
+        if (self.target):
+            data = data.strip()
+            if (data != ''):
+                self.pending.append(data)
+    def getNums(self, days=1):
+        return self.results[0:days]
+
+class MyHTMLParser(HTMLParser):
+    def handle_starttag(self, tag, attrs):
+        print "Start tag:", tag
+        for attr in attrs:
+            print "     attr:", attr
+    def handle_endtag(self, tag):
+        print "End tag  :", tag
+    def handle_data(self, data):
+        print "Data     :", data
+
 def getWinning(days=1):
-  results = []
-  date_search = """<td align="right" height='25'><span class='textblack'>"""
-  num_search = """<td align="left" height='25'><span class='textblack'><b>"""
-  url = urlopen('http://megamillions.com/numbers/pastdrawings.asp')
-  for line in url:
-    stripped = line.lstrip()
-    if stripped.startswith(date_search):
-      date = re.findall('\d+/\d+/\d+', line)
-    elif stripped.startswith(num_search):
-      groups = re.findall('(\d+,\s\d+,\s\d+,\s\d+,\s\d+).*?(\d+)', line)
-      number_set = groups[0][0].split(',')
-      pb = groups[0][1]
-      results.append((date, set(number_set), pb))
-      if len(results) >= days:
-        break
-  return results
+    url = urlopen('http://megamillions.com/winning-numbers/last-25-drawings')
+    parser = MMParser()
+    for line in url:
+        parser.feed(line)
+    parser.close()
+    return parser.getNums(days)
 
 if __name__ == "__main__":
-  winning = getWinning(2)
-  print winning
+    winning = getWinning(2)
+    print winning
